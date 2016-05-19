@@ -1,0 +1,22 @@
+{
+  "name": "prezto/ipfilter",
+  "type": "library",
+  "description": "PSR-7 ip filter middleware. Sets the status code to 401 if needed according to user defined rules.",
+  "keywords": ["firewall", "PSR-7", "ip-filter", "middleware"],
+  "homepage": "https://github.com/Prezto/permission",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dany Henriquez",
+      "email": "dany.henriquez@outlook.comm"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "psr/http-message": ">=1.0"
+  },
+  "autoload": {
+    "psr-4": { "Prezto\\IpFilter\\": "src/" }
+  }
+}
+
