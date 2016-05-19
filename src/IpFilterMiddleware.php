@@ -20,7 +20,7 @@ class IpFilterMiddleware
                 $this->addIpRange($address[0], $address[1]);
             else
                 $this->addIp($address);
-
+        $this->patterns = $addresses;
         $this->mode = $mode;
     }
 
@@ -70,7 +70,7 @@ class IpFilterMiddleware
 
     public function addIp($ip)
     {
-        $this->addresses[] = $ip;
+        $this->addresses[] = ip2long($ip);
         return $this;
     }
 }
