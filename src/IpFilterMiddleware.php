@@ -1,10 +1,10 @@
 <?php
 
+namespace Prezto\IpFilter;
+
 use \Psr\Http\Message\RequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use \Prezto\IpFilter\Mode as Mode;
-
-namespace Prezto\IpFilter;
+use \Prezto\IpFilter\Mode;
 
 class IpFilterMiddleware
 {
@@ -15,7 +15,12 @@ class IpFilterMiddleware
 
     public function __construct($addresses = [], $mode = Mode::ALLOW)
     {
-        $this->patterns = $addresses;
+        foreach ($addresses as $address)
+            if (is_array($address))
+                $this->addIpRange($address[0], $address[1]);
+            else
+                $this->addIp($address);
+
         $this->mode = $mode;
     }
 
