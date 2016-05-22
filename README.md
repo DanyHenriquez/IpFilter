@@ -28,4 +28,6 @@ $filter->addIp('192.168.1.98');
 
 ```
 
-After this you can add the class to a psr7 mjiddleware loader that accepts $request, $response and next.
+After this you can add the class to a psr7 middleware loader that accepts $request, $response and next as parameters.
+
+By default there is an error handler assigned when the user ois denied access. You can define your own by calling setHandler method and pass it a function/callable as parameter. The parameters of this function need to be $request, $response. If access is denied it will interupt the execution after calling the handler.
