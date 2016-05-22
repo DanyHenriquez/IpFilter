@@ -12,6 +12,7 @@ class IpFilterMiddleware
     protected $addresses = [];
     protected $mode = null;
     protected $allowed = null;
+    protected $handler = null;
 
     public function __construct($addresses = [], $mode = Mode::ALLOW)
     {
@@ -22,6 +23,11 @@ class IpFilterMiddleware
                 $this->addIp($address);
         $this->patterns = $addresses;
         $this->mode = $mode;
+        $this->handler = function (Request $request, Response $response) {
+            $response = $response->withStatus(401);
+            $response->getBody()->write("Access denied");
+            return $response;
+        };
     }
 
     public function __invoke(Request $request, Response $response, $next)
@@ -32,11 +38,12 @@ class IpFilterMiddleware
         if ($this->mode == Mode::DENY)
             $this->allowed = $this->deny($request);
 
-        if (!$this->allowed)
-            $response = $response->withStatus(401);
+        if (!$this->allowed) {
+            $handler = $this->handler;
+            return $handler($request, $response);
+        }
 
         $response = $next($request, $response);
-
         return $response;
     }
 
@@ -58,6 +65,11 @@ class IpFilterMiddleware
             return true;
 
         return false;
+    }
+
+    public function setHandler($handler)
+    {
+        $this->handler = $handler;
     }
 
     public function addIpRange($start, $end)
